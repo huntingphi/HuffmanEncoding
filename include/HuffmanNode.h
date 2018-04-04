@@ -13,7 +13,9 @@ char key; //Either a char, or EOF char or NOT_CHAR sentinal
 public:
 HuffmanNode(char key, int frequency); //default constructor - define in .cpp
 
-~HuffmanNode(); //destructor - define in .cpp file
+HuffmanNode(std::shared_ptr<HuffmanNode> left_child, std::shared_ptr<HuffmanNode> right_child); //internal parent node constructor
+
+    ~HuffmanNode(); //destructor - define in .cpp file
 
 HuffmanNode(const HuffmanNode &node); //Copy constructor
 
@@ -21,7 +23,7 @@ HuffmanNode& operator = (const HuffmanNode& other); //Assignment operator
 
 HuffmanNode(HuffmanNode&& other); //Move constructor
 
-HuffmanNode& operator = (const HuffmanNode&& other); //Move assignment operator
+HuffmanNode& operator = ( HuffmanNode&& other); //Move assignment operator
 
 
 char getKey();

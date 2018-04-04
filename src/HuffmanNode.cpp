@@ -1,9 +1,10 @@
 #include "../include/HuffmanNode.h"
 
 void HuffmanNode::setLeftChild(std::shared_ptr<HuffmanNode> child){
+        this->left = child;
 }
 void HuffmanNode::setRigthtChild(std::shared_ptr<HuffmanNode> child){
-
+        this->right = child;
 }
 
 char HuffmanNode::getKey(){
@@ -22,22 +23,22 @@ std::shared_ptr<HuffmanNode> HuffmanNode::getRightChild(){
 }
 
 
-HuffmanNode::HuffmanNode(char key, int frequency){
+HuffmanNode::HuffmanNode(char k, int f):key(k),frequency(f){
         //default constructor - define in .cpp
-        this->key = key;
-        this->frequency = frequency;
 
 }
 
+HuffmanNode::HuffmanNode(std::shared_ptr<HuffmanNode> left_child, std::shared_ptr<HuffmanNode> right_child):left(left_child),right(right_child){
+        frequency = left_child->frequency + right_child->frequency;
+}
 
-HuffmanNode::~HuffmanNode(){
+HuffmanNode::~HuffmanNode()
+{
         //destructor - define in .cpp file
 
 }
-HuffmanNode::HuffmanNode(const HuffmanNode &node){
+HuffmanNode::HuffmanNode(const HuffmanNode &node):key(node.key),frequency(node.frequency){
         //Copy constructor
-        this->frequency = node.frequency;
-        this->key = node.key;
 }
 
 HuffmanNode& HuffmanNode::operator = (const HuffmanNode &other){
@@ -47,9 +48,35 @@ HuffmanNode& HuffmanNode::operator = (const HuffmanNode &other){
         return *this;
 }
 
-HuffmanNode::HuffmanNode(HuffmanNode&& other){
+HuffmanNode::HuffmanNode(HuffmanNode&& other):key(char('\0')),frequency(0), left(nullptr), right(nullptr){
         //Move constructor
+        key = other.key;
+        frequency = other.frequency;
+        left = std::move(other.left);//std::make_shared<HuffmanNode>(std::move(other.left));
+        right = std::move(other.right); //std::make_shared<HuffmanNode>(std::move(other.right));
+
+        other.key = '\0';
+        other.frequency = 0;
+        other.left = nullptr;
+        other.right = nullptr;
+
 }
-HuffmanNode& HuffmanNode::operator = (const HuffmanNode&& other){
+HuffmanNode& HuffmanNode::operator = (HuffmanNode&& other){
         //Move assignment operator
+        if (this != &other){
+                left = nullptr;
+                right = nullptr;
+                key = '\0';
+                frequency = 0;
+                
+                key = other.key;
+                frequency = other.frequency;
+                left = std::move(other.left);   //std::make_shared<HuffmanNode>(std::move(other.left));
+                right = std::move(other.right); //std::make_shared<HuffmanNode>(std::move(other.right));
+                
+                other.key = '\0';
+                other.frequency = 0;
+                other.left = nullptr;
+                other.right = nullptr;
+        }
 }
