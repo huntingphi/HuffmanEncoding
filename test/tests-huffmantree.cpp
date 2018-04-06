@@ -106,5 +106,5 @@ TEST_CASE("Tests buildFrequencyTable"){
 TEST_CASE("Test buildHuffmanTree"){
         HuffmanTree htree;
         htree.buildFrequencyTable("abbcccddddeeee");
-        REQUIRE(htree.buildHuffmanTree(htree.buildFrequencyTable("abbcccddddeeee"))==HuffmanNode('a',1));
+        REQUIRE(*htree.buildHuffmanTree(htree.buildFrequencyTable("abbcccddddeeee"))==HuffmanNode('a',1));
 }

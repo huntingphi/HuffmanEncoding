@@ -24,7 +24,7 @@ HuffmanTree& operator = (const HuffmanTree&& other); //Move assignment operator
 
 std::unordered_map<char, int> buildFrequencyTable(std::string input);
 
-HuffmanNode* buildHuffmanTree(std::unordered_map<char, int> table);
+std::shared_ptr<HuffmanNode> buildHuffmanTree(std::unordered_map<char, int> table);
 
 
 

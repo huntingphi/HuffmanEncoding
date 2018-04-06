@@ -7,18 +7,18 @@ void HuffmanNode::setRigthtChild(std::shared_ptr<HuffmanNode> child){
         this->right = child;
 }
 
-char HuffmanNode::getKey(){
+char HuffmanNode::getKey() const{
         return key;
 }
 
-int HuffmanNode::getFrequency(){
+int HuffmanNode::getFrequency() const{
         return frequency;
 }
 
-std::shared_ptr<HuffmanNode> HuffmanNode::getLeftChild(){
+std::shared_ptr<HuffmanNode> HuffmanNode::getLeftChild() const{
         return right;
 }
-std::shared_ptr<HuffmanNode> HuffmanNode::getRightChild(){
+std::shared_ptr<HuffmanNode> HuffmanNode::getRightChild() const{
         return left;        
 }
 
@@ -75,7 +75,6 @@ bool HuffmanNode::operator==(HuffmanNode &other)
 
         return true;
 }
-
 HuffmanNode& HuffmanNode::operator = (HuffmanNode&& other){
         //Move assignment operator
         if (this != &other){

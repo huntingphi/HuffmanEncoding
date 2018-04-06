@@ -19,12 +19,13 @@ std::unordered_map<char, int> HuffmanTree::buildFrequencyTable(std::string input
         return counters;
 }
 
-HuffmanNode* HuffmanTree::buildHuffmanTree(std::unordered_map<char, int> table){ //Tested: N
+std::shared_ptr<HuffmanNode> HuffmanTree::buildHuffmanTree(std::unordered_map<char, int> table)
+{ //Tested: N
         std::priority_queue<HuffmanNode, std::vector<HuffmanNode>, myComparator > pq;
         for (auto c:table){
                 pq.push(HuffmanNode(c.first,c.second));
         }
-        return pq.top;
+        return std::make_shared<HuffmanNode>(pq.top());
 }
 
 HuffmanTree::HuffmanTree(){

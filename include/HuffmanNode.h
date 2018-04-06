@@ -26,14 +26,15 @@ HuffmanNode(HuffmanNode&& other); //Move constructor
 HuffmanNode& operator = ( HuffmanNode&& other); //Move assignment operator
 
 bool operator == (HuffmanNode& other);
-char getKey();
 
-int getFrequency();
+char getKey() const;
+
+int getFrequency() const;
 
 void setLeftChild(std::shared_ptr<HuffmanNode> child);
 void setRigthtChild(std::shared_ptr<HuffmanNode> child);
 
-std::shared_ptr<HuffmanNode> getLeftChild();
-std::shared_ptr<HuffmanNode> getRightChild();
+std::shared_ptr<HuffmanNode> getLeftChild() const;
+std::shared_ptr<HuffmanNode> getRightChild() const;
 };
 #endif
