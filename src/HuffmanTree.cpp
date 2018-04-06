@@ -3,7 +3,7 @@
 class myComparator
 {
       public:
-        bool operator()(const HuffmanNode& node_1, const HuffmanNode& node_2)
+        bool operator()(HuffmanNode node_1, HuffmanNode node_2)
         {
                 return (node_1.getFrequency() > node_2.getFrequency());
         }

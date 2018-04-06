@@ -25,7 +25,7 @@ HuffmanNode(HuffmanNode&& other); //Move constructor
 
 HuffmanNode& operator = ( HuffmanNode&& other); //Move assignment operator
 
-
+bool operator == (HuffmanNode& other);
 char getKey();
 
 int getFrequency();

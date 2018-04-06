@@ -61,6 +61,21 @@ HuffmanNode::HuffmanNode(HuffmanNode&& other):key(char('\0')),frequency(0), left
         other.right = nullptr;
 
 }
+
+bool HuffmanNode::operator==(HuffmanNode &other)
+{
+        if (this->key != other.getKey())
+                return false;
+        if (this->frequency != other.getFrequency())
+                return false;
+        if (this->left != other.getLeftChild())
+                return false;
+        if (this->right != other.getRightChild())
+                return false;
+
+        return true;
+}
+
 HuffmanNode& HuffmanNode::operator = (HuffmanNode&& other){
         //Move assignment operator
         if (this != &other){
