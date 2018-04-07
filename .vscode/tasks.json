@@ -1,0 +1,26 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Test all",
+            "type": "shell",
+            "command": "echo Testing... && make test-node && make test-tree",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Test Node",
+            "type": "shell",
+            "command": "make test-node"
+        },
+        {
+            "label": "Test Tree",
+            "type": "shell",
+            "command": "make test-tree"
+        }
+    ]
+}
