@@ -5,29 +5,45 @@
 #include <string>
 #include <queue>
 #include <unordered_map>
+#include <fstream>
+class myComparator
+{
+  public:
+    bool operator()(HuffmanNode node_1, HuffmanNode node_2)
+    {
+        return (node_1.getFrequency() > node_2.getFrequency());
+    }
+};
+
 class HuffmanTree {
 private:
 
 
 public:
-HuffmanTree(); //default constructor - define in .cpp
+  
 
-~HuffmanTree(); //destructor - define in .cpp file
+  HuffmanTree(); //default constructor - define in .cpp
 
-HuffmanTree(const HuffmanTree &ht); //Copy constructor
+  ~HuffmanTree(); //destructor - define in .cpp file
 
-HuffmanTree& operator = (const HuffmanTree& other); //Assignment operator
+  HuffmanTree(const HuffmanTree &ht); //Copy constructor
 
-HuffmanTree(HuffmanTree&& other); //Move constructor
+  HuffmanTree &operator=(const HuffmanTree &other); //Assignment operator
 
-HuffmanTree& operator = (const HuffmanTree&& other); //Move assignment operator
+  bool operator==(const HuffmanTree &other) const;
 
-std::unordered_map<char, int> buildFrequencyTable(std::string input);
+  HuffmanTree(HuffmanTree &&other); //Move constructor
 
-std::shared_ptr<HuffmanNode> buildHuffmanTree(std::unordered_map<char, int> table);
+  HuffmanTree &operator=(const HuffmanTree &&other); //Move assignment operator
 
+  std::unordered_map<char, int> buildFrequencyTable(std::string input);
 
+  std::unordered_map<char, std::string> buildCodeTable(std::shared_ptr<HuffmanNode> root_node);
 
-
+  std::shared_ptr<HuffmanNode> buildHuffmanTree(std::priority_queue<HuffmanNode, std::vector<HuffmanNode>, myComparator> pq);
+  void processNode(std::unordered_map<char, std::string>& table,std::shared_ptr<HuffmanNode> root_node,std::string prefix);
+  void mapToString(std::unordered_map<char,std::string> map);
+  std::string compress(std::string file_name);
+  std::priority_queue<HuffmanNode, std::vector<HuffmanNode>, myComparator> ConstructPQ(std::unordered_map<char, int> table);
 };
 #endif

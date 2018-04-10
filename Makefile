@@ -5,8 +5,8 @@ VPATH = test src include bin build
 
 build:
 
-test-tree: 000-CatchMain.o HuffmanTree.o tests-huffmantree.o
-	$(CXX) $(CXXFLAGS) -I ./include -o bin/test-tree build/000-CatchMain.o build/HuffmanTree.o build/tests-huffmantree.o && ./bin/test-tree --success
+test-tree: 000-CatchMain.o HuffmanNode.o HuffmanTree.o tests-huffmantree.o
+	$(CXX) $(CXXFLAGS) -I ./include -o bin/test-tree build/000-CatchMain.o build/HuffmanNode.o build/HuffmanTree.o build/tests-huffmantree.o && ./bin/test-tree --success
 
 
 test-node: 000-CatchMain.o HuffmanNode.o tests-huffmannode.o
@@ -22,7 +22,7 @@ tests-huffmantree.o: tests-huffmantree.cpp
 	$(CXX) $(CXXFLAGS) -c test/tests-huffmantree.cpp -o build/tests-huffmantree.o
 
 
-HuffmanTree.o: HuffmanTree.cpp
+HuffmanTree.o: HuffmanNode.o HuffmanTree.cpp
 	$(CXX) $(CXXFLAGS) -c src/HuffmanTree.cpp -o build/HuffmanTree.o
 
 

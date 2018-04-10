@@ -1,96 +1,169 @@
 #include "../include/HuffmanNode.h"
-
-void HuffmanNode::setLeftChild(std::shared_ptr<HuffmanNode> child){
-        this->left = child;
-}
-void HuffmanNode::setRigthtChild(std::shared_ptr<HuffmanNode> child){
-        this->right = child;
-}
-
-char HuffmanNode::getKey() const{
-        return key;
-}
-
-int HuffmanNode::getFrequency() const{
-        return frequency;
-}
-
-std::shared_ptr<HuffmanNode> HuffmanNode::getLeftChild() const{
-        return right;
-}
-std::shared_ptr<HuffmanNode> HuffmanNode::getRightChild() const{
-        return left;        
-}
-
-
+/***********************BIG SIX**********************/
 HuffmanNode::HuffmanNode(char k, int f):key(k),frequency(f){
+        // std::cout << "Constructor with initialisation called" << std::endl;
+
         //default constructor - define in .cpp
 
 }
 
-HuffmanNode::HuffmanNode(std::shared_ptr<HuffmanNode> left_child, std::shared_ptr<HuffmanNode> right_child):left(left_child),right(right_child){
-        frequency = left_child->frequency + right_child->frequency;
+
+HuffmanNode::HuffmanNode(std::shared_ptr<HuffmanNode> left_child, std::shared_ptr<HuffmanNode> right_child):left_child_node(left_child),right_child_node(right_child){
+        // std::cout << "Parent of children constructor called" << std::endl;
+        frequency = left_child->getFrequency() + right_child->getFrequency();
 }
 
-HuffmanNode::~HuffmanNode()
+HuffmanNode::HuffmanNode()
+{
+        // std::cout << "Default constructor called" << std::endl;
+}
+
+    HuffmanNode::~HuffmanNode()
 {
         //destructor - define in .cpp file
 
 }
-HuffmanNode::HuffmanNode(const HuffmanNode &node):key(node.key),frequency(node.frequency){
+HuffmanNode::HuffmanNode(const HuffmanNode &other):key(other.key),frequency(other.frequency){
+        // std::cout << "Copy constructor called" << std::endl;
+        
         //Copy constructor
+        if(other.getLeftChild()!=nullptr)setLeftChild(other.getLeftChild());
+        if(other.getRightChild()!=nullptr)setRightChild(other.getRightChild());
 }
 
 HuffmanNode& HuffmanNode::operator = (const HuffmanNode &other){
+        // std::cout << "Assignment operator called" << std::endl;
+
         //Assignment operator
-        this->frequency = other.frequency;
-        this->key = other.key;
+        this->frequency = other.getFrequency();
+        this->key = other.getKey();
+        if(other.getLeftChild()!=nullptr)setLeftChild(other.getLeftChild());
+        if(other.getRightChild()!=nullptr)setRightChild(other.getRightChild());
+        
         return *this;
 }
 
-HuffmanNode::HuffmanNode(HuffmanNode&& other):key(char('\0')),frequency(0), left(nullptr), right(nullptr){
-        //Move constructor
-        key = other.key;
-        frequency = other.frequency;
-        left = std::move(other.left);//std::make_shared<HuffmanNode>(std::move(other.left));
-        right = std::move(other.right); //std::make_shared<HuffmanNode>(std::move(other.right));
+HuffmanNode::HuffmanNode(HuffmanNode&& other):key(char('\0')),frequency(0), left_child_node(nullptr), right_child_node(nullptr){
+        // std::cout << "Move constructor called" << std::endl;
 
-        other.key = '\0';
-        other.frequency = 0;
-        other.left = nullptr;
-        other.right = nullptr;
+        //Move constructor
+        setKey(other.getKey());
+        setFrequency(other.getFrequency());
+        setLeftChild(std::move(other.getLeftChild()));//std::make_shared<HuffmanNode>(std::move(other.left));
+        setRightChild(std::move(other.getRightChild())); //std::make_shared<HuffmanNode>(std::move(other.right));
+
+        other.setKey(char(-2));
+        other.setFrequency(0);
+        other.setLeftChild(nullptr);
+        other.setRightChild(nullptr);
 
 }
 
-bool HuffmanNode::operator==(HuffmanNode &other)
+
+HuffmanNode &HuffmanNode::operator=(HuffmanNode &&other)
 {
-        if (this->key != other.getKey())
+        // std::cout<<"Move assignment operator called"<<std::endl;
+        //Move assignment operator
+        if (this != &other)
+        {
+                setLeftChild(nullptr);
+                setRightChild(nullptr);
+                setKey(char(-2));
+                setFrequency(0);
+
+                setKey(other.getKey());
+                setFrequency(other.getFrequency());
+                setLeftChild(std::move(other.getLeftChild()));   //std::make_shared<HuffmanNode>(std::move(other.left));
+                setRightChild(std::move(other.getRightChild())); //std::make_shared<HuffmanNode>(std::move(other.right));
+
+                other.setKey(char(-2));
+                other.setFrequency(0);
+                other.setLeftChild(nullptr);
+                other.setRightChild(nullptr);
+        }
+}
+///////////////////////////////////////////////////
+
+/****************RELATIONAL OPERATOR OVERLOADING***************/
+bool HuffmanNode::operator==(const HuffmanNode &other) const
+{
+        // std::cout<<"Ran correctly";
+        // std::cout<<(int)other.getKey()<<" "<<other.getFrequency()<<" "<<other.getLeftChild()<<" "<<other.getRightChild()<<std::endl;
+        // std::cout << (int)getKey() << " " << getFrequency() << " " << getLeftChild() << " " << getRightChild() << std::endl;
+        if (getKey() != other.getKey())
                 return false;
-        if (this->frequency != other.getFrequency())
+
+        if (getFrequency() != other.getFrequency())
                 return false;
-        if (this->left != other.getLeftChild())
+
+        if (getLeftChild() == nullptr && other.getLeftChild() == nullptr)
+                return true;
+        if (!(getLeftChild() == nullptr) != !(other.getLeftChild() == nullptr))
+                return false; //Implement XOR, if one is null but the other isn't then they aren't equal
+        if (*getLeftChild() != *other.getLeftChild())
                 return false;
-        if (this->right != other.getRightChild())
+        if (getRightChild() == nullptr && other.getRightChild() == nullptr)
+                return true;
+        if (!(getRightChild() == nullptr) != !(other.getRightChild() == nullptr))
+                return false;
+        if (*getRightChild() != *other.getRightChild())
                 return false;
 
         return true;
 }
-HuffmanNode& HuffmanNode::operator = (HuffmanNode&& other){
-        //Move assignment operator
-        if (this != &other){
-                left = nullptr;
-                right = nullptr;
-                key = '\0';
-                frequency = 0;
-                
-                key = other.key;
-                frequency = other.frequency;
-                left = std::move(other.left);   //std::make_shared<HuffmanNode>(std::move(other.left));
-                right = std::move(other.right); //std::make_shared<HuffmanNode>(std::move(other.right));
-                
-                other.key = '\0';
-                other.frequency = 0;
-                other.left = nullptr;
-                other.right = nullptr;
-        }
+
+bool HuffmanNode::operator!=(const HuffmanNode &other) const
+{
+
+        return !(*this == other);
 }
+///////////////////////////////////////////////////
+
+/******************ACCESSORS*********************/
+char HuffmanNode::getKey() const
+{
+        return key;
+}
+
+int HuffmanNode::getFrequency() const
+{
+        return frequency;
+}
+
+std::shared_ptr<HuffmanNode> HuffmanNode::getLeftChild() const
+{
+        return left_child_node;
+}
+std::shared_ptr<HuffmanNode> HuffmanNode::getRightChild() const
+{
+        return right_child_node;
+}
+
+std::string HuffmanNode::toString() const
+{
+        // std::string output = "";
+        std::string output_root = std::string("Key: ") + char(getKey()) + std::string(" Frequency: ") + std::to_string(getFrequency());
+        if (getLeftChild() != nullptr)
+                output_root += std::string("\n\t Left child: ") + (*getLeftChild()).toString();
+        if (getRightChild() != nullptr)
+                output_root += std::string("\n\t Right child: ") + (*getRightChild()).toString();
+        return output_root;
+}
+///////////////////////////////////////////////////
+
+/******************MUTATORS********************/
+void HuffmanNode::setFrequency(int frequency){
+        this->frequency = frequency;
+}
+void HuffmanNode::setKey(char key){
+        this->key = key;
+}
+
+void HuffmanNode::setLeftChild(std::shared_ptr<HuffmanNode> child_left){
+        this->left_child_node = child_left;
+}
+void HuffmanNode::setRightChild(std::shared_ptr<HuffmanNode> child_right){
+        this->right_child_node = child_right;
+}
+///////////////////////////////////////////////////
+

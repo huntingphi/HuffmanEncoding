@@ -2,6 +2,7 @@
 #include "../include/HuffmanTree.h"
 #include <iostream>
 
+
 TEST_CASE("Tests buildFrequencyTable"){
         bool flag_1 = true;
         bool flag_2 = true;
@@ -103,8 +104,79 @@ TEST_CASE("Tests buildFrequencyTable"){
 
 }
 
+
 TEST_CASE("Test buildHuffmanTree"){
         HuffmanTree htree;
-        htree.buildFrequencyTable("abbcccddddeeee");
-        REQUIRE(*htree.buildHuffmanTree(htree.buildFrequencyTable("abbcccddddeeee"))==HuffmanNode('a',1));
+        htree.buildFrequencyTable("abbccc");
+
+        HuffmanNode a('a', 1);
+        std::shared_ptr<HuffmanNode> a_ptr = std::make_shared<HuffmanNode>(a);
+        HuffmanNode b('b', 2);
+        std::shared_ptr<HuffmanNode> b_ptr = std::make_shared<HuffmanNode>(b);
+        HuffmanNode c('c', 3);
+        std::shared_ptr<HuffmanNode> c_ptr = std::make_shared<HuffmanNode>(c);
+
+        HuffmanNode end(char(-1), 1);
+        std::shared_ptr<HuffmanNode> end_ptr = std::make_shared<HuffmanNode>(end);
+        // std::cout << "-------------------------------Left object:" << left.getKey() << std::endl;
+        // std::cout<<"-------------------------------Left pointer:"<<(*(HuffmanNode(left_ptr, right_ptr).getLeftChild())).getKey()<<std::endl;
+        HuffmanNode it_1 = HuffmanNode(end_ptr,a_ptr);
+        // std::cout << "Right of it_1: " << char((*(it_1.getRightChild())).getKey()) << std::endl;
+        std::shared_ptr<HuffmanNode> it_1_ptr = std::make_shared<HuffmanNode>(it_1);
+        // std::cout<<"it_1: "<<it_1.toString()<<std::endl;
+        HuffmanNode it_2 = HuffmanNode(b_ptr, it_1_ptr);
+        // std::cout << "it_2: " << it_2.toString() << std::endl;
+        std::shared_ptr<HuffmanNode> it_2_ptr = std::make_shared<HuffmanNode>(it_2);
+
+        HuffmanNode it_3 = HuffmanNode(c_ptr,it_2_ptr);
+        // std::cout << "it_3: " << it_3.toString() << std::endl;
+        
+
+        HuffmanNode expected_root = it_3;
+        // std::cout << "it_3: " << it_3.toString() << std::endl;
+        // std::cout << "expected: " << expected_root.toString() << std::endl;
+
+        HuffmanNode resulting_root = *htree.buildHuffmanTree(htree.ConstructPQ(htree.buildFrequencyTable("abbccc")));
+        std::cout << "expected: " << expected_root.toString() << std::endl;
+        std::cout << "resulting: " << resulting_root.toString() << std::endl;
+
+        REQUIRE( resulting_root == it_3);
+}
+
+TEST_CASE("buildCodeTable"){
+        HuffmanTree htree;
+        std::shared_ptr<HuffmanNode> resulting_root = htree.buildHuffmanTree(htree.ConstructPQ(htree.buildFrequencyTable("abbccc")));
+        std::unordered_map<char,std::string> resulting_table;
+        resulting_table = htree.buildCodeTable(resulting_root);
+
+        std::unordered_map<char, std::string> expected_table_1 = {{'a',"111"},{'b',"10"},{'c',"0"},{char(-1),"110"}};
+        // std::unordered_map<char, std::string> expected_table_2 = {{'a', "101"}, {'b', "10"}, {'c', "0"}, {char(-1), "100"}};
+        // std::unordered_map<char, std::string> expected_table_3 = {{'a', "100"}, {'b', "00"}, {'c', "0"}, {char(-1), "101"}};
+        // std::unordered_map<char, std::string> expected_table_4 = {{'a', "101"}, {'b', "10"}, {'c', "0"}, {char(-1), "100"}};
+        // std::unordered_map<char, std::string> expected_table_5 = {{'a', "100"}, {'b', "11"}, {'c', "0"}, {char(-1), "000"}};
+        // std::unordered_map<char, std::string> expected_table_6 = {{'a',"000"},{'b',"00"},{'c',"1"},{char(-1),"001"}};
+
+        std::string c_0 = "0";
+        std::string c_1 = "1";
+        std::string b_0 = "10";
+        std::string b_1 = "10";
+
+        std::cout<<"exepcted 1: \n";
+        htree.mapToString(expected_table_1);
+
+        // std::cout << "exepcted 2: \n";
+        // htree.mapToString(expected_table_2);
+
+        std::cout << "resulting: \n";
+        htree.mapToString(resulting_table);
+
+        REQUIRE(resulting_table.at('a')==expected_table_1.at('a'));
+        REQUIRE(resulting_table.at('b') == expected_table_1.at('b'));
+        REQUIRE(resulting_table.at('c') == expected_table_1.at('c'));
+        REQUIRE(resulting_table.at(char(-1)) == expected_table_1.at(char(-1)));
+
+        // REQUIRE(resulting_table.at('a') == expected_table_2.at('a'));
+        // REQUIRE(resulting_table.at('b') == expected_table_2.at('b'));
+        // REQUIRE(resulting_table.at('c') == expected_table_2.at('c'));
+        // REQUIRE(resulting_table.at(char(-1)) == expected_table_2.at(char(-1)));
 }

@@ -1,0 +1,3 @@
+Just made a expected root node, now need to test
+
+Initialised key to \0 to test, change back and set it to something sentinal
