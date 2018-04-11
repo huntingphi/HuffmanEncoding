@@ -180,3 +180,11 @@ TEST_CASE("buildCodeTable"){
         // REQUIRE(resulting_table.at('c') == expected_table_2.at('c'));
         // REQUIRE(resulting_table.at(char(-1)) == expected_table_2.at(char(-1)));
 }
+
+TEST_CASE("compress")
+{
+        HuffmanTree htree;
+        std::string resulting_output = htree.compress("lorem.txt", "lorem.hc");
+        std::string expected_output = "1111010000";
+        REQUIRE(resulting_output == expected_output);
+}
