@@ -3,7 +3,10 @@ CXXFLAGS = -std=c++11 -Wall
 VPATH = test src include bin build
 
 
-build:
+build:	000-CatchMain.o Utils.o HuffmanNode.o HuffmanTree.o driver.o
+	$(CXX) $(CXXFLAGS) -I ./include -o bin/huffencode build/Utils.o build/HuffmanNode.o build/HuffmanTree.o build/driver.o
+
+
 
 test-tree: 000-CatchMain.o Utils.o HuffmanNode.o HuffmanTree.o tests-huffmantree.o
 	$(CXX) $(CXXFLAGS) -I ./include -o bin/test-tree build/000-CatchMain.o build/Utils.o build/HuffmanNode.o build/HuffmanTree.o build/tests-huffmantree.o && ./bin/test-tree --success
@@ -12,11 +15,13 @@ test-tree: 000-CatchMain.o Utils.o HuffmanNode.o HuffmanTree.o tests-huffmantree
 test-node: 000-CatchMain.o HuffmanNode.o tests-huffmannode.o
 	$(CXX) $(CXXFLAGS) -I ./include -o bin/test-node build/000-CatchMain.o build/HuffmanNode.o build/tests-huffmannode.o && ./bin/test-node --success
 
+driver.o: driver.cpp
+	$(CXX) $(CXXFLAGS) -c src/driver.cpp -o build/driver.o
 tests-huffmannode.o: tests-huffmannode.cpp
 	$(CXX) $(CXXFLAGS) -c test/tests-huffmannode.cpp -o build/tests-huffmannode.o
 
 HuffmanNode.o: HuffmanNode.cpp
-	$(CXX) $(CXXFLAGS) -c src/HuffmanNode.cpp -o build/HuffmanNode.o
+	$(CXX) $(CXXFLAGS) -I ./include -c src/HuffmanNode.cpp -o build/HuffmanNode.o
 
 tests-huffmantree.o: tests-huffmantree.cpp
 	$(CXX) $(CXXFLAGS) -c test/tests-huffmantree.cpp -o build/tests-huffmantree.o

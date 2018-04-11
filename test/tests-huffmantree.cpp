@@ -162,13 +162,13 @@ TEST_CASE("buildCodeTable"){
         std::string b_1 = "10";
 
         std::cout<<"exepcted 1: \n";
-        htree.mapToString(expected_table_1);
+        std::cout<<htree.mapToString(expected_table_1);
 
         // std::cout << "exepcted 2: \n";
         // htree.mapToString(expected_table_2);
 
         std::cout << "resulting: \n";
-        htree.mapToString(resulting_table);
+        std::cout << htree.mapToString(resulting_table);
 
         REQUIRE(resulting_table.at('a')==expected_table_1.at('a'));
         REQUIRE(resulting_table.at('b') == expected_table_1.at('b'));
@@ -184,7 +184,9 @@ TEST_CASE("buildCodeTable"){
 TEST_CASE("compress")
 {
         HuffmanTree htree;
-        std::string resulting_output = htree.compress("lorem.txt", "lorem.hc");
+        // std::string resulting_output = htree.compress("lorem.txt", "lorem");
+        std::string resulting_output = htree.compressToBits("lorem.txt", "lorem");
+
         std::string expected_output = "1111010000";
         REQUIRE(resulting_output == expected_output);
 }

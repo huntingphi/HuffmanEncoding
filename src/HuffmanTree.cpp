@@ -73,10 +73,14 @@ void HuffmanTree::processNode(std::unordered_map<char, std::string>& table,std::
 
 std::string HuffmanTree::mapToString(std::unordered_map<char, std::string> map)
 {
-        std::string output_string = "{\"fieldCount\":\""+static_cast<int>(map.size())+std::string("\"},\n\"{\"table\":[\n");
+        std::string output_string = "{\"fieldCount\":\""+std::to_string(map.size())+std::string("\"},\n{\"table\":[\n");
+        
         for (auto key : map)
         {
-                output_string+="{\"key\":\""+key.first+std::string("\", \"value\":\"")+key.second+"\" },\n";
+                output_string+="\t{\"key\":\"";
+                output_string.append(1,key.first);
+                output_string+=std::string("\", \"code\":\"");
+                output_string+=key.second+"\" },\n";
                 // std::cout<<"key: "<<key.first<<"value: "<<key.second<<std::endl;
         }
         output_string+="]}";
@@ -106,9 +110,25 @@ std::string HuffmanTree::compress(std::string input_file_name,std::string output
         }
         // std::cout<<input_string<<std::endl;
         // std::cout<<output_string<<std::endl;
-        Utils::writeToFile(output_file_name,output_string.c_str());
+        Utils::writeToFile(output_file_name+".hc",output_string.c_str());
+        Utils::writeToFile((output_file_name+".hdr"),mapToString(code_table).c_str());
 
         return output_string;
+}
+
+std::string HuffmanTree::compressToBits(std::string file_name, std::string output_file_name)
+{
+        HuffmanTree htree;
+        std::string input_string = htree.compress(file_name,output_file_name);
+        
+        std::bitset<16> output_bitset(input_string.c_str());
+        std::string file_path = "assets/" + output_file_name;
+        file_path+=".bin";
+        std::ofstream output_file(file_path, std::ios::out | std::ios::binary);
+        output_file << std::to_string(input_string.size())<<output_bitset.to_string();
+        // output_file.write(data,);
+        output_file.close();
+        return input_string;
 }
 
 HuffmanTree::HuffmanTree(){

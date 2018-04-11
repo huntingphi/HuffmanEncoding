@@ -1,0 +1,7 @@
+{"fieldCount":"4"},
+{"table":[
+	{"key":"a", "code":"111" },
+	{"key":"ÿ", "code":"110" },
+	{"key":"b", "code":"10" },
+	{"key":"c", "code":"0" },
+]}

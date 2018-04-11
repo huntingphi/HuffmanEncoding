@@ -21,6 +21,15 @@
             "label": "Test Tree",
             "type": "shell",
             "command": "make test-tree"
+        },
+        {
+            "label": "Build",
+            "type": "shell",
+            "command": "make build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }
