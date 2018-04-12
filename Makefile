@@ -6,6 +6,8 @@ VPATH = test src include bin build
 build:	000-CatchMain.o Utils.o HuffmanNode.o HuffmanTree.o driver.o
 	$(CXX) $(CXXFLAGS) -I ./include -o bin/huffencode build/Utils.o build/HuffmanNode.o build/HuffmanTree.o build/driver.o
 
+run: build
+	bin/huffencode $(ARGS)
 
 test-all: tests-huffmannode.o tests-huffmantree.o
 	./bin/test-node --success && ./bin/test-tree --success
@@ -41,10 +43,10 @@ Utils.o: Utils.cpp
 
 clean:
 	echo "Cleaning..."
-	find . -type f \( -name "*.o" ! -name "000-CatchMain.o" -or -name "test" \) -delete
-	# find . -type f \( -name "*.gch" -or -name "tests-utils" -or -name "runner" \) -delete
-	find . -type f -name "*.gch" -delete
-	find . -type f -name "lorem.bin" -delete
+	find . -type f \( -name "*.o" ! -name "000-CatchMain.o" -or -name "test-node" \) -delete
+	find . -type f \( -name "*.gch" -or -name "test-tree" -or -name "huffencode" \) -delete
+	# find . -type f -name "*.gch" -delete
+	find . -type f -name "lorem.hc.*" -delete
 	find . -type f -name "lorem.hc" -delete
 	find . -type f -name "lorem.hdr" -delete
 	

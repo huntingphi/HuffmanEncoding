@@ -129,7 +129,16 @@ TEST_CASE("Test buildCodeTable"){
 TEST_CASE("Test compress")
 {
         HuffmanTree htree;
-        std::string resulting_output = htree.compressToBits("lorem.txt", "lorem");
+        std::string resulting_output = htree.compress("lorem.txt", "lorem.hc");
         std::string expected_output = "1111010000";
+        REQUIRE(resulting_output == expected_output);
+}
+
+TEST_CASE("Test compressToBits"){
+        std::string expected_output = "1111010000";
+        HuffmanTree htree;
+        htree.compressToFile("lorem.txt","lorem.hc");
+        htree.compressToBits("lorem.txt", "lorem.hc.bits");
+        std::string resulting_output = htree.unpackBits("lorem.hc.bits");
         REQUIRE(resulting_output == expected_output);
 }

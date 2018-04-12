@@ -132,41 +132,65 @@ void HuffmanTree::compressToFile(std::string input_file_name, std::string output
         Utils::writeToFile((output_file_name + ".hdr"), mapToString(code_table).c_str());
 }
 
+
 std::string HuffmanTree::compressToBits(std::string file_name, std::string output_file_name)
 {
         
         std::string input_string = compress(file_name,output_file_name);
+        std::string file_path = "assets/" + output_file_name;
+        std::ofstream output_file(file_path, std::ios::out | std::ios::binary);
+        std::ofstream output_file_data(file_path+".data"); //single int as header which lists the number of bits in the file
+        int number_of_bits = input_string.size();
+        output_file_data<<number_of_bits;
+        std::stringstream input_stream(input_string);
+        char bit_stream[9];
+        char c;
 
-        char stream(0);
-        for(int i = 0;i<input_string.size();i++){
-        stream |= (input_string[i] ? 1 : 0) << i;
-        if(i%8 == 0){
-                Utils::writeToFile(output_file_name,&stream);
-                stream = 0;
+        while (input_stream.get(bit_stream, 9))
+        {
+                for (int i = 7; i >= 0; i--)
+                {
+                        if (bit_stream[7 - i] == '1')
+                        {
+                                c |= 1 << i;
+                        }
+                        else
+                        {
+                                c &= ~(1 << i);
+                        }
+                }
+                output_file << c;
         }
-        }
-        Utils::writeToFile(output_file_name, &stream);
-
-        // if (input_string.size() % 8 != 0)
-        // {
-        //         for (int j = input_string.size() % 8; j < 8; j++)
-        //         {
-        //                 stream+=0;
-        //         }
-        // }
-
-        //     std::bitset<16>
-        //         output_bitset(input_string.c_str());
-        // std::string file_path = "assets/" + output_file_name;
-        // file_path+=".bin";
-        // std::ofstream output_file(file_path, std::ios::out | std::ios::binary);
-        // output_file << std::to_string(input_string.size())<<output_bitset.to_string();
-        // // output_file.write(data,);
-        // output_file.close();
+        
         return input_string;
 }
 
-HuffmanTree::HuffmanTree(){
+std::string HuffmanTree::unpackBits(std::string file_name){
+        std::string filepath = "assets/"+file_name;//+".hc.bits";
+        std::ifstream input_file(filepath, std::ios::in | std::ios::binary);
+        
+        std::stringstream input_stream;
+
+        char c;
+        while (input_file.get(c))
+        {
+                for (int i = 7; i >= 0; i--)
+                {
+                        input_stream<< ((c >> i) & 1);
+                }
+        }
+        input_file.close();
+        std::string binary_data = input_stream.str();
+        std::ifstream input_file_data(filepath+".data");
+        int size = 0;
+        input_file_data>>size;
+        input_file_data.close();
+
+        return binary_data.substr(0,size);
+}
+
+    HuffmanTree::HuffmanTree()
+{
         //default constructor - define in .cpp
 }
 

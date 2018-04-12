@@ -7,6 +7,7 @@
 #include <queue>
 #include <unordered_map>
 #include <fstream>
+#include <sstream>
 #include <bitset>
 class myComparator
 {
@@ -47,8 +48,10 @@ public:
     std::shared_ptr<HuffmanNode> buildHuffmanTree(std::priority_queue<HuffmanNode, std::vector<HuffmanNode>, myComparator> pq);
     void processNode(std::unordered_map<char, std::string> & table, std::shared_ptr<HuffmanNode> root_node, std::string prefix);
     std::string mapToString(std::unordered_map<char, std::string> map);
-    std::string compress(std::string file_name);
-    void compressToFile(std::string input_file_name, std::string output_file_name);        std::string compressToBits(std::string file_name, std::string output_file_name);
+    // std::string compress(std::string file_name);
+    void compressToFile(std::string input_file_name, std::string output_file_name);
+    std::string compressToBits(std::string file_name, std::string output_file_name);
+    std::string unpackBits(std::string file_name);
     std::priority_queue<HuffmanNode, std::vector<HuffmanNode>, myComparator> ConstructPQ(std::unordered_map<char, int> table);
 };
 #endif
