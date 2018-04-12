@@ -7,13 +7,15 @@ build:	000-CatchMain.o Utils.o HuffmanNode.o HuffmanTree.o driver.o
 	$(CXX) $(CXXFLAGS) -I ./include -o bin/huffencode build/Utils.o build/HuffmanNode.o build/HuffmanTree.o build/driver.o
 
 
+test-all: tests-huffmannode.o tests-huffmantree.o
+	./bin/test-node --success && ./bin/test-tree --success
 
 test-tree: 000-CatchMain.o Utils.o HuffmanNode.o HuffmanTree.o tests-huffmantree.o
 	$(CXX) $(CXXFLAGS) -I ./include -o bin/test-tree build/000-CatchMain.o build/Utils.o build/HuffmanNode.o build/HuffmanTree.o build/tests-huffmantree.o && ./bin/test-tree --success
 
 
 test-node: 000-CatchMain.o HuffmanNode.o tests-huffmannode.o
-	$(CXX) $(CXXFLAGS) -I ./include -o bin/test-node build/000-CatchMain.o build/HuffmanNode.o build/tests-huffmannode.o && ./bin/test-node --success
+	$(CXX) $(CXXFLAGS) -I ./include -o bin/test-node build/000-CatchMain.o build/HuffmanNode.o build/tests-huffmannode.o
 
 driver.o: driver.cpp
 	$(CXX) $(CXXFLAGS) -c src/driver.cpp -o build/driver.o
@@ -41,4 +43,10 @@ clean:
 	echo "Cleaning..."
 	find . -type f \( -name "*.o" ! -name "000-CatchMain.o" -or -name "test" \) -delete
 	# find . -type f \( -name "*.gch" -or -name "tests-utils" -or -name "runner" \) -delete
-	find . -type f -name "*.gch"
+	find . -type f -name "*.gch" -delete
+	find . -type f -name "lorem.bin" -delete
+	find . -type f -name "lorem.hc" -delete
+	find . -type f -name "lorem.hdr" -delete
+	
+	
+	

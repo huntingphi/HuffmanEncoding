@@ -87,9 +87,6 @@ HuffmanNode &HuffmanNode::operator=(HuffmanNode &&other)
 /****************RELATIONAL OPERATOR OVERLOADING***************/
 bool HuffmanNode::operator==(const HuffmanNode &other) const
 {
-        // std::cout<<"Ran correctly";
-        // std::cout<<(int)other.getKey()<<" "<<other.getFrequency()<<" "<<other.getLeftChild()<<" "<<other.getRightChild()<<std::endl;
-        // std::cout << (int)getKey() << " " << getFrequency() << " " << getLeftChild() << " " << getRightChild() << std::endl;
         if (getKey() != other.getKey())
                 return false;
 
@@ -115,7 +112,7 @@ bool HuffmanNode::operator==(const HuffmanNode &other) const
 bool HuffmanNode::operator!=(const HuffmanNode &other) const
 {
 
-        return !(*this == other);
+        return !(*this == other);//Isn't always true (generally) but works for this assignment
 }
 ///////////////////////////////////////////////////
 
@@ -141,7 +138,6 @@ std::shared_ptr<HuffmanNode> HuffmanNode::getRightChild() const
 
 std::string HuffmanNode::toString() const
 {
-        // std::string output = "";
         std::string output_root = std::string("Key: ") + char(getKey()) + std::string(" Frequency: ") + std::to_string(getFrequency());
         if (getLeftChild() != nullptr)
                 output_root += std::string("\n\t Left child: ") + (*getLeftChild()).toString();

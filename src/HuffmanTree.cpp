@@ -2,9 +2,9 @@
 
 
 
-bool HuffmanTree::operator==(const HuffmanTree &other) const{
-        return true;
-}
+// bool HuffmanTree::operator==(const HuffmanTree &other) const{
+//         return true;
+// }
 std::unordered_map<char, int> HuffmanTree::buildFrequencyTable(std::string input){ //Tested: Y
         std::unordered_map<char, int> counters;
         for (char c : input)
@@ -19,7 +19,7 @@ std::unordered_map<char, int> HuffmanTree::buildFrequencyTable(std::string input
         {
                 throw std::logic_error("NO_KEY char used has been found in the file");
         }
-        counters[char(-1)] = 1;//Insert a character that signifies the end of the line
+        counters[char(-1)] = 1;//Insert a character that represents the end of the line
         return counters;
 }
 
@@ -50,6 +50,8 @@ std::unordered_map<char, std::string> HuffmanTree::buildCodeTable(std::shared_pt
         return table;
 }
 
+
+//Recursively iterate through the nodes and their children and update the map accordingly
 void HuffmanTree::processNode(std::unordered_map<char, std::string>& table,std::shared_ptr<HuffmanNode> root_node,std::string prefix)
 {
         char parent_key = (*root_node).getKey();
@@ -61,16 +63,14 @@ void HuffmanTree::processNode(std::unordered_map<char, std::string>& table,std::
 
         if((*root_node).getLeftChild()!=nullptr){
                 processNode(table, (*root_node).getLeftChild(), prefix+"0");
-                // char left_child_key = (*(*root_node).getLeftChild()).getKey();
-                // table[left_child_key] = std::string("0")+prefix;
         }
         if((*root_node).getRightChild()!=nullptr){
                 processNode(table, (*root_node).getRightChild(), prefix+"1");
-                // char right_child_key = (*(*root_node).getRightChild()).getKey();
 
         }
 }
 
+//String representation of the map
 std::string HuffmanTree::mapToString(std::unordered_map<char, std::string> map)
 {
         std::string output_string = "{\"fieldCount\":\""+std::to_string(map.size())+std::string("\"},\n{\"table\":[\n");
@@ -95,39 +95,74 @@ std::string HuffmanTree::compress(std::string input_file_name,std::string output
         ///////////////////////////////////////////
 
         /****************Construct code table**************/
-        HuffmanTree htree;
-        std::shared_ptr<HuffmanNode> root_node = htree.buildHuffmanTree(htree.ConstructPQ(htree.buildFrequencyTable(input_string)));
+        std::shared_ptr<HuffmanNode> root_node = buildHuffmanTree(ConstructPQ(buildFrequencyTable(input_string)));
         std::unordered_map<char, std::string> code_table;
-        code_table = htree.buildCodeTable(root_node);
+        code_table = buildCodeTable(root_node);
         ///////////////////////////////////////////////////
 
         /*****************Build output string*************/
         std::string output_string = "";
-        // htree.mapToString(code_table);
         for(char c:input_string){
-                // if(*code_table.at(c).c_str() != char(-1))
                 output_string+=code_table.at(c);
         }
-        // std::cout<<input_string<<std::endl;
-        // std::cout<<output_string<<std::endl;
-        Utils::writeToFile(output_file_name+".hc",output_string.c_str());
-        Utils::writeToFile((output_file_name+".hdr"),mapToString(code_table).c_str());
+        
 
         return output_string;
 }
 
+void HuffmanTree::compressToFile(std::string input_file_name, std::string output_file_name)
+{
+        ///////////////////Read file here//////////
+        std::string input_string = Utils::readFile(input_file_name);
+        ///////////////////////////////////////////
+
+        /****************Construct code table**************/
+        std::shared_ptr<HuffmanNode> root_node = buildHuffmanTree(ConstructPQ(buildFrequencyTable(input_string)));
+        std::unordered_map<char, std::string> code_table;
+        code_table = buildCodeTable(root_node);
+        ///////////////////////////////////////////////////
+
+        /*****************Build output string*************/
+        std::string output_string = "";
+        for(char c:input_string){
+                output_string+=code_table.at(c);
+        }
+
+        Utils::writeToFile(output_file_name + ".hc", output_string.c_str());
+        Utils::writeToFile((output_file_name + ".hdr"), mapToString(code_table).c_str());
+}
+
 std::string HuffmanTree::compressToBits(std::string file_name, std::string output_file_name)
 {
-        HuffmanTree htree;
-        std::string input_string = htree.compress(file_name,output_file_name);
         
-        std::bitset<16> output_bitset(input_string.c_str());
-        std::string file_path = "assets/" + output_file_name;
-        file_path+=".bin";
-        std::ofstream output_file(file_path, std::ios::out | std::ios::binary);
-        output_file << std::to_string(input_string.size())<<output_bitset.to_string();
-        // output_file.write(data,);
-        output_file.close();
+        std::string input_string = compress(file_name,output_file_name);
+
+        char stream(0);
+        for(int i = 0;i<input_string.size();i++){
+        stream |= (input_string[i] ? 1 : 0) << i;
+        if(i%8 == 0){
+                Utils::writeToFile(output_file_name,&stream);
+                stream = 0;
+        }
+        }
+        Utils::writeToFile(output_file_name, &stream);
+
+        // if (input_string.size() % 8 != 0)
+        // {
+        //         for (int j = input_string.size() % 8; j < 8; j++)
+        //         {
+        //                 stream+=0;
+        //         }
+        // }
+
+        //     std::bitset<16>
+        //         output_bitset(input_string.c_str());
+        // std::string file_path = "assets/" + output_file_name;
+        // file_path+=".bin";
+        // std::ofstream output_file(file_path, std::ios::out | std::ios::binary);
+        // output_file << std::to_string(input_string.size())<<output_bitset.to_string();
+        // // output_file.write(data,);
+        // output_file.close();
         return input_string;
 }
 
@@ -139,23 +174,23 @@ HuffmanTree::~HuffmanTree(){
         //destructor - define in .cpp file
 }
 
-HuffmanTree::HuffmanTree(const HuffmanTree &ht){
-        //Copy constructor
-}
+// HuffmanTree::HuffmanTree(const HuffmanTree &ht){
+//         //Copy constructor
+// }
 
-HuffmanTree& HuffmanTree::operator = (const HuffmanTree& other){
-        //Assignment operator
-        return *this;//TODO: FIX THIS
-}
+// HuffmanTree& HuffmanTree::operator = (const HuffmanTree& other){
+//         //Assignment operator
+//         return *this;//TODO: FIX THIS
+// }
 
-HuffmanTree::HuffmanTree(HuffmanTree&& other){
-        //Move constructor
+// HuffmanTree::HuffmanTree(HuffmanTree&& other){
+//         //Move constructor
 
-}
+// }
 
-HuffmanTree& HuffmanTree::operator = (const HuffmanTree&& other){
-        //Move assignment operator
-}
+// HuffmanTree& HuffmanTree::operator = (const HuffmanTree&& other){
+//         //Move assignment operator
+// }
 
 
 

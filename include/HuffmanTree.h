@@ -28,15 +28,15 @@ public:
 
   ~HuffmanTree(); //destructor - define in .cpp file
 
-  HuffmanTree(const HuffmanTree &ht); //Copy constructor
+  // HuffmanTree(const HuffmanTree &ht); //Copy constructor
 
-  HuffmanTree &operator=(const HuffmanTree &other); //Assignment operator
+  // HuffmanTree &operator=(const HuffmanTree &other); //Assignment operator
 
-  bool operator==(const HuffmanTree &other) const;
+  // bool operator==(const HuffmanTree &other) const;
 
-  HuffmanTree(HuffmanTree &&other); //Move constructor
+  // HuffmanTree(HuffmanTree &&other); //Move constructor
 
-  HuffmanTree &operator=(const HuffmanTree &&other); //Move assignment operator
+  // HuffmanTree &operator=(const HuffmanTree &&other); //Move assignment operator
 
   std::unordered_map<char, int> buildFrequencyTable(std::string input);
 
@@ -48,7 +48,7 @@ public:
     void processNode(std::unordered_map<char, std::string> & table, std::shared_ptr<HuffmanNode> root_node, std::string prefix);
     std::string mapToString(std::unordered_map<char, std::string> map);
     std::string compress(std::string file_name);
-    std::string compressToBits(std::string file_name, std::string output_file_name);
+    void compressToFile(std::string input_file_name, std::string output_file_name);        std::string compressToBits(std::string file_name, std::string output_file_name);
     std::priority_queue<HuffmanNode, std::vector<HuffmanNode>, myComparator> ConstructPQ(std::unordered_map<char, int> table);
 };
 #endif
